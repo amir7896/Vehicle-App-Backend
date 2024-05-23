@@ -7,6 +7,7 @@ const {
   getSingleVehicle,
   updateVehicle,
   deleteVehicle,
+  getTotalVehicles,
 } = require("../controllers/vehicle");
 const {
   validVehicle,
@@ -14,6 +15,7 @@ const {
 const isAuthenticate = require("../middlewares/authentication/isAuthenticate");
 
 router.get("/list", isAuthenticate, getVehicles);
+router.get("/total", isAuthenticate, getTotalVehicles);
 router.get("/:id", isAuthenticate, getSingleVehicle);
 router.post("/create", isAuthenticate, validVehicle, createVehicle);
 router.put("/update/:id", isAuthenticate, validVehicle, updateVehicle);

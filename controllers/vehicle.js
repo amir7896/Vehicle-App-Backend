@@ -1,6 +1,23 @@
 const Vehicle = require("../models/vehicle");
 const { STATUS_CODE, SUCCESS_MSG, ERRORS } = require("../constants");
 
+// Get total number of vehicles
+const getTotalVehicles = async (req, res) => {
+  try {
+    const count = await Vehicle.countDocuments();
+
+    return res.status(200).json({
+      success: true,
+      data: count,
+    });
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).json({
+      success: false,
+      message: ERRORS.ERRORS.SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
 // Create vehicle
 const createVehicle = async (req, res) => {
   const { color, model, make, registrationNo, category } = req.body;
@@ -37,7 +54,10 @@ const createVehicle = async (req, res) => {
 // Get vehicles
 const getVehicles = async (req, res) => {
   try {
-    const vehicles = await Vehicle.find({});
+    const vehicles = await Vehicle.find({}).populate(
+      "category",
+      "categoryName"
+    );
 
     if (vehicles.length > 0) {
       return res.status(STATUS_CODE.OK).json({ success: true, data: vehicles });
@@ -153,6 +173,7 @@ const deleteVehicle = async (req, res) => {
 module.exports = {
   createVehicle,
   getVehicles,
+  getTotalVehicles,
   getSingleVehicle,
   updateVehicle,
   deleteVehicle,

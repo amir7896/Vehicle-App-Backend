@@ -1,0 +1,159 @@
+const Vehicle = require("../models/vehicle");
+const { STATUS_CODE, SUCCESS_MSG, ERRORS } = require("../constants");
+
+// Create vehicle
+const createVehicle = async (req, res) => {
+  const { color, model, make, registrationNo, category } = req.body;
+  try {
+    const vehicle = new Vehicle({
+      color,
+      model,
+      make,
+      registrationNo,
+      category,
+    });
+
+    const response = await vehicle.save();
+    if (response) {
+      return res.status(STATUS_CODE.CREATED).json({
+        success: true,
+        message: SUCCESS_MSG.VEHICLE.CREATED,
+        vehicle: vehicle,
+      });
+    } else {
+      return res
+        .status(STATUS_CODE.BAD_REQUEST)
+        .json({ success: false, message: ERRORS.VEHICLE.NOT_CREATED });
+    }
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).json({
+      success: false,
+      message: ERRORS.ERRORS.SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
+
+// Get vehicles
+const getVehicles = async (req, res) => {
+  try {
+    const vehicles = await Vehicle.find({});
+
+    if (vehicles.length > 0) {
+      return res.status(STATUS_CODE.OK).json({ success: true, data: vehicles });
+    } else {
+      return res.status(STATUS_CODE.NOT_FOUND).json({
+        success: true,
+        message: ERRORS.VEHICLE.NOT_FOUNDS,
+        data: null,
+      });
+    }
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).json({
+      success: false,
+      message: ERRORS.ERRORS.SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
+
+// Get single vehicle
+const getSingleVehicle = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const vehicle = await Vehicle.findById(id);
+
+    if (!vehicle) {
+      return res.status(STATUS_CODE.NOT_FOUND).json({
+        success: true,
+        message: ERRORS.VEHICLE.NOT_EXISTS,
+        data: null,
+      });
+    }
+
+    return res.status(STATUS_CODE.OK).json({ success: true, data: vehicle });
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).json({
+      success: false,
+      message: ERRORS.ERRORS.SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
+
+// Update vehicle
+const updateVehicle = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { color, model, make, registrationNo, category } = req.body;
+
+    const singleVehicle = await Vehicle.findById(id);
+    if (!singleVehicle) {
+      return res
+        .status(STATUS_CODE.NOT_FOUND)
+        .json({ success: false, message: ERRORS.VEHICLE.NOT_EXISTS });
+    } else {
+      const updatedVehicle = await Vehicle.findByIdAndUpdate(
+        id,
+        {
+          color,
+          model,
+          make,
+          registrationNo,
+          category,
+        },
+        { new: true }
+      );
+      if (!updatedVehicle) {
+        return res
+          .status(STATUS_CODE.BAD_REQUEST)
+          .json({ success: false, message: ERRORS.VEHICLE.NOT_UPDATED });
+      }
+
+      return res.status(STATUS_CODE.OK).json({
+        success: true,
+        message: SUCCESS_MSG.VEHICLE.UPDATED,
+        department: updatedVehicle,
+      });
+    }
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).json({
+      success: false,
+      message: ERRORS.ERRORS.SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
+
+// Delete vehicle
+const deleteVehicle = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedVehicle = await Vehicle.findByIdAndDelete(id);
+
+    if (!deletedVehicle) {
+      return res
+        .status(STATUS_CODE.BAD_REQUEST)
+        .json({ success: false, message: ERRORS.VEHICLE.NOT_DELETED });
+    }
+
+    return res
+      .status(STATUS_CODE.OK)
+      .json({ success: true, message: SUCCESS_MSG.VEHICLE.DELETED });
+  } catch (error) {
+    console.log("Delete error:", error);
+    return res.status(STATUS_CODE.SERVER_ERROR).json({
+      success: false,
+      message: ERRORS.ERRORS.SERVER_ERROR,
+      error: error.message,
+    });
+  }
+};
+
+module.exports = {
+  createVehicle,
+  getVehicles,
+  getSingleVehicle,
+  updateVehicle,
+  deleteVehicle,
+};

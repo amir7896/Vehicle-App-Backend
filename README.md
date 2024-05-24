@@ -17,10 +17,10 @@ npm install
 
 ## Table of Contents
 
-1. [Signup](#Signup user)
-2. [Login](#Login user)
-3. [Categories](#Category apis)
-4. [Vehicles](#Vehicle apis)
+1. [Signup](#Signup-user)
+2. [Login](#Login-user)
+3. [Categories](#Category-apis)
+4. [Vehicles](#Vehicle-apis)
 
 ## 1. Signup
 

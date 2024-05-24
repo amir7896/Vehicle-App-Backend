@@ -1,4 +1,4 @@
-## Shopping app backend
+## Vehicle app backend
 
 This documentation provides details on how to use the API endpoints of the backend server.
 

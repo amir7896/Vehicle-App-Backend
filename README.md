@@ -18,9 +18,9 @@ npm install
 ## Table of Contents
 
 1. [Signup](#Signup user)
-2. [Login ](#Login user)
-3. [Categories ](#Category apis)
-4. [Vehicles ](#Vehicle apis)
+2. [Login](#Login user)
+3. [Categories](#Category apis)
+4. [Vehicles](#Vehicle apis)
 
 ## 1. Signup
 
@@ -49,7 +49,7 @@ npm install
 
 ## 3. Categories
 
-### 1. Create category
+### 3.1 Create category
 
 - **URL**: POST /api/category/create
 - **Description**: Create new category.
@@ -60,7 +60,7 @@ npm install
 - `message` (string): A success message.
 - `data` (object): An object of created category.
 
-### 2. Get Categories
+### 3.2 Get Categories
 
 - **URL**: GET /api/category/list
 - **Description**: Get categories list.
@@ -68,7 +68,7 @@ npm install
 - `success` (boolean): `true` if the categories were retrieved successfully.
 - `data` (Array):An array of categories.
 
-### 3. Get single category
+### 3.3 Get single category
 
 - **URL**: GET /api/category/:id
 - **Description**: Retrieve a single category by ID.
@@ -79,7 +79,7 @@ npm install
 - `message` (string): A success message.
 - `data` (object): The retrieved category.
 
-### 4. Update category
+### 3.4 Update category
 
 - **URL**: PUT /api/category/update/:id
 - **Description**: Update a category by ID.
@@ -92,7 +92,7 @@ npm install
 - `message` (string): A success message.
 - `data` (object): The updated category.
 
-### 5. Delete category
+### 3.5 Delete category
 
 - **URL**: DELETE /api/category/delete/:id
 - **Description**: Delete a category by ID.
@@ -104,7 +104,7 @@ npm install
 
 ## 4. Vehicles
 
-### 1. Create vehicle
+### 4.1 Create vehicle
 
 - **URL**: POST /api/vehicle/create
 - **Description**: Create new vehicle.
@@ -119,7 +119,7 @@ npm install
 - `message` (string): A success message.
 - `data` (object): An object of created category.
 
-### 2. Get Vehicles
+### 4.2 Get Vehicles
 
 - **URL**: GET /api/vehicle/list
 - **Description**: Get vehicles list.
@@ -127,7 +127,7 @@ npm install
 - `success` (boolean): `true` if the vehicles were retrieved successfully.
 - `data` (Array):An array of vehicles.
 
-### 3. Get single category
+### 4.3 Get single category
 
 - **URL**: GET /api/vehicle/:id
 - **Description**: Retrieve a single vehicle by ID.
@@ -138,7 +138,7 @@ npm install
 - `message` (string): A success message.
 - `data` (object): The retrieved vehicle.
 
-### 4. Update category
+### 4.4 Update category
 
 - **URL**: PUT /api/vehicle/update/:id
 - **Description**: Update a vehicle by ID.
@@ -155,7 +155,7 @@ npm install
 - `message` (string): A success message.
 - `data` (object): The updated vehicle.
 
-### 5. Delete category
+### 4.5 Delete category
 
 - **URL**: DELETE /api/vehicle/delete/:id
 - **Description**: Delete a vehicle by ID.
@@ -165,7 +165,7 @@ npm install
 - `success` (boolean): `true` if the vehicle was deleted successfully.
 - `message` (string): A success message.
 
-### 6. Total Vehicle Save In System
+### 4.6 Total Vehicle Save In System
 
 - **URL**: GET /api/vehicle/total
 - **Description**: Get total vehicles stored in system.

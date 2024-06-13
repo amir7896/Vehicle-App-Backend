@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { upload } = require("../services/multer/index");
 
 const {
   createVehicle,
@@ -17,7 +18,13 @@ const isAuthenticate = require("../middlewares/authentication/isAuthenticate");
 router.get("/list", isAuthenticate, getVehicles);
 router.get("/total", isAuthenticate, getTotalVehicles);
 router.get("/:id", isAuthenticate, getSingleVehicle);
-router.post("/create", isAuthenticate, validVehicle, createVehicle);
+router.post(
+  "/create",
+  isAuthenticate,
+  upload.single("image"),
+  validVehicle,
+  createVehicle
+);
 router.put("/update/:id", isAuthenticate, validVehicle, updateVehicle);
 router.delete("/delete/:id", isAuthenticate, deleteVehicle);
 

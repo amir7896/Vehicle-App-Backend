@@ -1,5 +1,11 @@
 const Vehicle = require("../models/vehicle");
-const { STATUS_CODE, SUCCESS_MSG, ERRORS } = require("../constants");
+const {
+  STATUS_CODE,
+  SUCCESS_MSG,
+  ERRORS,
+  BUCKET_NAMES,
+} = require("../constants");
+const { uploadImage, getImage, deleteImage } = require("../services/s3/index");
 
 // Get total number of vehicles
 const getTotalVehicles = async (req, res) => {
@@ -21,6 +27,13 @@ const getTotalVehicles = async (req, res) => {
 // Create vehicle
 const createVehicle = async (req, res) => {
   const { color, model, make, registrationNo, category } = req.body;
+
+  let image;
+  if (req.file) {
+    image = await uploadImage(req.file, BUCKET_NAMES.vehicles);
+  } else {
+    image = null;
+  }
   try {
     const vehicle = new Vehicle({
       color,
@@ -28,6 +41,7 @@ const createVehicle = async (req, res) => {
       make,
       registrationNo,
       category,
+      image,
     });
 
     const response = await vehicle.save();
@@ -60,6 +74,13 @@ const getVehicles = async (req, res) => {
     );
 
     if (vehicles.length > 0) {
+      for (const vehicle of vehicles) {
+        if (vehicle.image) {
+          const imageURL = await getImage(vehicle.image);
+          vehicle.image = imageURL;
+        }
+      }
+
       return res.status(STATUS_CODE.OK).json({ success: true, data: vehicles });
     } else {
       return res.status(STATUS_CODE.NOT_FOUND).json({
@@ -149,17 +170,29 @@ const updateVehicle = async (req, res) => {
 const deleteVehicle = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedVehicle = await Vehicle.findByIdAndDelete(id);
 
-    if (!deletedVehicle) {
+    const vehicle = await Vehicle.findById(id);
+
+    if (!vehicle) {
       return res
-        .status(STATUS_CODE.BAD_REQUEST)
-        .json({ success: false, message: ERRORS.VEHICLE.NOT_DELETED });
-    }
+        .status(STATUS_CODE.NOT_FOUND)
+        .json({ success: false, message: ERRORS.VEHICLE.NOT_FOUNDS });
+    } else {
+      if (vehicle.image) {
+        await deleteImage(vehicle.image);
+      }
+      const deletedVehicle = await Vehicle.findByIdAndDelete(id);
 
-    return res
-      .status(STATUS_CODE.OK)
-      .json({ success: true, message: SUCCESS_MSG.VEHICLE.DELETED });
+      if (!deletedVehicle) {
+        return res
+          .status(STATUS_CODE.BAD_REQUEST)
+          .json({ success: false, message: ERRORS.VEHICLE.NOT_DELETED });
+      }
+
+      return res
+        .status(STATUS_CODE.OK)
+        .json({ success: true, message: SUCCESS_MSG.VEHICLE.DELETED });
+    }
   } catch (error) {
     console.log("Delete error:", error);
     return res.status(STATUS_CODE.SERVER_ERROR).json({

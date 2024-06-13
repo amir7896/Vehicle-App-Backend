@@ -12,6 +12,9 @@ const vehicleSchema = new Schema(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+    },
     make: {
       type: String,
       required: true,

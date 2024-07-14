@@ -19,6 +19,10 @@ app.use(
   })
 );
 
+app.get('/', (req,res) =>  {
+  res.status(200).json({success: true, data: 'Hello'})
+})
+
 app.use("/api/category", categoryRoute);
 app.use("/api/vehicle", vehicleRoute);
 app.use("/api/user", userRoute);
